@@ -1,12 +1,9 @@
 '''
-example of a constant section
+set up/initialization of pygame
 '''
-class Example:
-    # strings
-    HELLO_WORLD = "Hello World!"
+# screen
+SCREEN_WIDTH = 1280
+SCREEN_HEIGHT = 720
 
-    # integers
-    NUMBER = 1
-
-    # booleans
-    BOOLEAN = True
+# fps
+FPS = 60
