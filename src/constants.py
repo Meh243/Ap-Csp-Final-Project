@@ -7,3 +7,10 @@ SCREEN_HEIGHT = 720
 
 # fps
 FPS = 60
+
+'''
+maze runner constants
+'''
+
+# player movement speed
+PLAYER_SPEED = 300
