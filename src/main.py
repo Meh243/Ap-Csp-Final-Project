@@ -11,19 +11,21 @@ def initialize_maze_runner():
 
 def run_maze_runner(delta_time, player_pos):
     # player set up
-    py.draw.circle(screen, "red", player_pos, 40)
+    mainCircle = py.draw.circle(screen, "red", player_pos, 40)
     
     # lets the player wrap around screen cleanly
     # idea created by Nate Bailey
-    py.draw.circle(screen, "red", (player_pos.x, player_pos.y + screen.get_height()), 40)
-    py.draw.circle(screen, "red", (player_pos.x,  player_pos.y - screen.get_height()), 40)
-    py.draw.circle(screen, "red", (player_pos.x + screen.get_width(), player_pos.y), 40)
-    py.draw.circle(screen, "red", (player_pos.x - screen.get_width(), player_pos.y), 40)
-    py.draw.circle(screen, "red", (player_pos.x + screen.get_width(), player_pos.y + screen.get_height()), 40)
-    py.draw.circle(screen, "red", (player_pos.x - screen.get_width(),  player_pos.y - screen.get_height()), 40)
-    py.draw.circle(screen, "red", (player_pos.x + screen.get_width(), player_pos.y - screen.get_height()), 40)
-    py.draw.circle(screen, "red", (player_pos.x - screen.get_width(), player_pos.y + screen.get_height()), 40)
+    topCircle = py.draw.circle(screen, "red", (player_pos.x, player_pos.y + screen.get_height()), 40)
+    bottomCircle = py.draw.circle(screen, "red", (player_pos.x,  player_pos.y - screen.get_height()), 40)
+    rightCircle = py.draw.circle(screen, "red", (player_pos.x + screen.get_width(), player_pos.y), 40)
+    leftCircle = py.draw.circle(screen, "red", (player_pos.x - screen.get_width(), player_pos.y), 40)
+    quadOneCircle = py.draw.circle(screen, "red", (player_pos.x + screen.get_width(), player_pos.y + screen.get_height()), 40)
+    quadTwoCircle = py.draw.circle(screen, "red", (player_pos.x - screen.get_width(), player_pos.y + screen.get_height()), 40)
+    quadThreeCircle = py.draw.circle(screen, "red", (player_pos.x - screen.get_width(),  player_pos.y - screen.get_height()), 40)
+    quadFourCircle = py.draw.circle(screen, "red", (player_pos.x + screen.get_width(), player_pos.y - screen.get_height()), 40)
     
+    circles = [mainCircle, topCircle, bottomCircle, rightCircle, leftCircle, quadOneCircle, quadTwoCircle, quadThreeCircle, quadFourCircle]
+     
     # player movement
     keys = py.key.get_pressed()
     if keys[py.K_w]:
@@ -45,7 +47,6 @@ def calculate_score_maze_runner():
 '''
 this is were the games will be run with pygame
 '''
-
 
 # pygame initialization
 py.init()
@@ -76,6 +77,8 @@ while running:
     
     # setting the fps
     delta_time = clock.tick(c.FPS) / 1000
+    
+calculate_score_maze_runner()
 
 # quits pygame
 py.quit()
