@@ -13,3 +13,13 @@ PLAYER_SPEED = 300
 
 # player color
 PLAYER_COLOR = "red"
+
+# player radius
+PLAYER_CIRCLE_RADIUS = 20
+
+# wall color
+WALL_COLOR = "purple"
+
+# wall height and width
+WALL_WIDTH = SCREEN_WIDTH / 10
+WALL_HEIGHT = SCREEN_HEIGHT / 10

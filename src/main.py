@@ -9,7 +9,16 @@ player_pos = 0
 dt = 0
 
 # obstacles
-obstacles = []
+obstacles = [["w", "o", "w", "o", "o", "o", "o", "o", "o", "o"], 
+             ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
+             ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
+             ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
+             ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
+             ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
+             ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
+             ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
+             ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
+             ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"]]
 
 # screen
 screen = py.display.set_mode((c.SCREEN_WIDTH, c.SCREEN_HEIGHT))
@@ -41,19 +50,25 @@ def main_loop():
         screen.fill(c.BACKGROUND_COLOR)
         
         # creating our circles to represent the player
-        mainCircle = py.draw.circle(screen, c.PLAYER_COLOR, player_pos, 40)
+        mainCircle = py.draw.circle(screen, c.PLAYER_COLOR, player_pos, c.PLAYER_CIRCLE_RADIUS)
         
         # these circles are used to allow the player to wrap around the screen
-        topCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x, player_pos.y + c.SCREEN_HEIGHT), 40)
-        bottomCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x, player_pos.y - c.SCREEN_HEIGHT), 40)
-        leftCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x - c.SCREEN_WIDTH, player_pos.y), 40)
-        rightCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x + c.SCREEN_WIDTH, player_pos.y), 40)
-        quadOneCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x + c.SCREEN_WIDTH, player_pos.y + c.SCREEN_HEIGHT), 40)
-        quadTwoCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x - c.SCREEN_WIDTH, player_pos.y + c.SCREEN_HEIGHT), 40)
-        quadThreeCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x - c.SCREEN_WIDTH, player_pos.y - c.SCREEN_HEIGHT), 40)
-        quadFourCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x + c.SCREEN_WIDTH, player_pos.y - c.SCREEN_HEIGHT), 40)
+        topCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x, player_pos.y + c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
+        bottomCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x, player_pos.y - c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
+        leftCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x - c.SCREEN_WIDTH, player_pos.y), c.PLAYER_CIRCLE_RADIUS)
+        rightCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x + c.SCREEN_WIDTH, player_pos.y), c.PLAYER_CIRCLE_RADIUS)
+        quadOneCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x + c.SCREEN_WIDTH, player_pos.y + c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
+        quadTwoCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x - c.SCREEN_WIDTH, player_pos.y + c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
+        quadThreeCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x - c.SCREEN_WIDTH, player_pos.y - c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
+        quadFourCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x + c.SCREEN_WIDTH, player_pos.y - c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
         
         circles = [mainCircle, topCircle, bottomCircle, leftCircle, rightCircle, quadOneCircle, quadTwoCircle, quadThreeCircle, quadFourCircle]
+        
+        # creating the walls based on how the obstacles list is initialized
+        for row in range(len(obstacles)):
+            for col in range(len(obstacles[row])):
+                if obstacles[row][col] == "w":
+                    wall = py.draw.rect(screen, c.WALL_COLOR, ((c.WALL_WIDTH * col, c.WALL_HEIGHT * row), (c.WALL_WIDTH, c.WALL_HEIGHT)))
         
         # update player
         keys = py.key.get_pressed()
@@ -76,7 +91,8 @@ def main_loop():
         
         # delta time for the player
         dt = clock.tick(c.FPS) / 1000
-        
+
+# initializing and starting maze runner        
 init()
 main_loop()
 
