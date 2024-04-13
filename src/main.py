@@ -9,7 +9,7 @@ player_pos = 0
 dt = 0
 
 # obstacles
-obstacles = [["w", "o", "w", "o", "o", "o", "o", "o", "o", "o"], 
+obstacles = [["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
              ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
              ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
              ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
@@ -18,7 +18,8 @@ obstacles = [["w", "o", "w", "o", "o", "o", "o", "o", "o", "o"],
              ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
              ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
              ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
-             ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"]]
+             ["w", "o", "o", "o", "o", "o", "o", "o", "o", "g"]]
+walls = []
 
 # screen
 screen = py.display.set_mode((c.SCREEN_WIDTH, c.SCREEN_HEIGHT))
@@ -38,6 +39,7 @@ def main_loop():
     global player_pos
     global dt
     global obstacles
+    global walls
     
     while True:
         # event handling
@@ -69,6 +71,22 @@ def main_loop():
             for col in range(len(obstacles[row])):
                 if obstacles[row][col] == "w":
                     wall = py.draw.rect(screen, c.WALL_COLOR, ((c.WALL_WIDTH * col, c.WALL_HEIGHT * row), (c.WALL_WIDTH, c.WALL_HEIGHT)))
+                    walls.append(wall)
+                if obstacles[row][col] == "g":
+                    goal = py.draw.rect(screen, c.GOAL_COLOR, ((c.WALL_WIDTH * col, c.WALL_HEIGHT * row), (c.WALL_WIDTH, c.WALL_HEIGHT)))
+        
+        # collision detection
+        for wall in walls:
+            for circle in circles:
+                if wall.colliderect(circle):
+                    # temporary losing condition for now
+                    player_pos = py.Vector2(c.SCREEN_WIDTH / 2, c.SCREEN_HEIGHT / 2)
+        
+        # goal detection
+        for circle in circles:
+            if goal.colliderect(circle):
+                # temporary winning condition for now
+                player_pos = py.Vector2(c.SCREEN_WIDTH / 2, c.SCREEN_HEIGHT / 2)
         
         # update player
         keys = py.key.get_pressed()

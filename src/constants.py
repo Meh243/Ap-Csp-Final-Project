@@ -23,3 +23,6 @@ WALL_COLOR = "purple"
 # wall height and width
 WALL_WIDTH = SCREEN_WIDTH / 10
 WALL_HEIGHT = SCREEN_HEIGHT / 10
+
+# goal color
+GOAL_COLOR = "green"
