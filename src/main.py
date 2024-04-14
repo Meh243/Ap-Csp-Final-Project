@@ -24,6 +24,9 @@ walls = []
 # screen
 screen = py.display.set_mode((c.SCREEN_WIDTH, c.SCREEN_HEIGHT))
 
+# while loop for the game
+running = True
+
 # initialize the obstacles and player
 def init():
     global player_pos
@@ -40,8 +43,9 @@ def main_loop():
     global dt
     global obstacles
     global walls
+    global running
     
-    while True:
+    while running:
         # event handling
         for event in py.event.get():
             if event.type == py.QUIT:
@@ -55,6 +59,7 @@ def main_loop():
         mainCircle = py.draw.circle(screen, c.PLAYER_COLOR, player_pos, c.PLAYER_CIRCLE_RADIUS)
         
         # these circles are used to allow the player to wrap around the screen
+        # idea by Nate Bailey
         topCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x, player_pos.y + c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
         bottomCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x, player_pos.y - c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
         leftCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x - c.SCREEN_WIDTH, player_pos.y), c.PLAYER_CIRCLE_RADIUS)
@@ -70,10 +75,13 @@ def main_loop():
         for row in range(len(obstacles)):
             for col in range(len(obstacles[row])):
                 if obstacles[row][col] == "w":
+                    # wall creation
                     wall = py.draw.rect(screen, c.WALL_COLOR, ((c.WALL_WIDTH * col, c.WALL_HEIGHT * row), (c.WALL_WIDTH, c.WALL_HEIGHT)))
                     walls.append(wall)
                 if obstacles[row][col] == "g":
+                    # goal creation
                     goal = py.draw.rect(screen, c.GOAL_COLOR, ((c.WALL_WIDTH * col, c.WALL_HEIGHT * row), (c.WALL_WIDTH, c.WALL_HEIGHT)))
+                # if no wall or goal, then it's an open space with no need to draw anything
         
         # collision detection
         for wall in walls:
@@ -89,6 +97,7 @@ def main_loop():
                 player_pos = py.Vector2(c.SCREEN_WIDTH / 2, c.SCREEN_HEIGHT / 2)
         
         # update player
+        # general movement learned from pygame documentation
         keys = py.key.get_pressed()
         if keys[py.K_w]:
             player_pos.y -= c.PLAYER_SPEED * dt
@@ -100,6 +109,7 @@ def main_loop():
             player_pos.x += c.PLAYER_SPEED * dt
             
         # wraps the player position around the screen
+        # idea by Nate Bailey
         player_pos.y = (player_pos.y + screen.get_height()) % screen.get_height()
         player_pos.x = (player_pos.x + screen.get_width()) % screen.get_width()
         
