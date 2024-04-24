@@ -1,3 +1,4 @@
+import random
 import pygame as py
 import constants as c
 
@@ -10,22 +11,22 @@ dt = 0
 
 # obstacles
 obstacles = [["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
-             ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
-             ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
-             ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
-             ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
-             ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
-             ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
-             ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
-             ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
-             ["w", "o", "o", "o", "o", "o", "o", "o", "o", "g"]]
+             ["o", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
+             ["o", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
+             ["o", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
+             ["o", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
+             ["o", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
+             ["o", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
+             ["o", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
+             ["o", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
+             ["o", "o", "o", "o", "o", "o", "o", "o", "o", "g"]]
 walls = []
-
-# screen
-screen = py.display.set_mode((c.SCREEN_WIDTH, c.SCREEN_HEIGHT))
 
 # while loop for the game
 running = True
+
+# screen
+screen = py.display.set_mode((c.SCREEN_WIDTH, c.SCREEN_HEIGHT))
 
 # initialize the obstacles and player
 def init():
@@ -36,6 +37,23 @@ def init():
     player_pos = py.Vector2(c.SCREEN_WIDTH / 2, c.SCREEN_HEIGHT / 2)
     
     # obstacles will be done later
+    for row in range(len(obstacles)):
+        for col in range(len(obstacles[row])):
+            if random.randint(0, 1) == 1 and obstacles[row][col] != "g":
+                obstacles[row][col] = "w"
+    
+    for row in obstacles:
+        for box in row:
+            if random.randint(0, 1) == 1 and box != "g":
+                box = "w"
+
+    obstacles[3][4] = "o"
+    obstacles[3][5] = "o"
+    obstacles[4][4] = "o"
+    obstacles[4][5] = "o"
+    obstacles[5][4] = "o"
+    obstacles[5][5] = "o"
+            
 
 # main game loop
 def main_loop():
@@ -50,7 +68,7 @@ def main_loop():
         for event in py.event.get():
             if event.type == py.QUIT:
                 py.quit()
-                exit()
+                quit()
         
         # clear screen
         screen.fill(c.BACKGROUND_COLOR)
