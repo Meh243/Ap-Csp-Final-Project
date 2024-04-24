@@ -10,16 +10,16 @@ player_pos = 0
 dt = 0
 
 # obstacles
-obstacles = [["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
-             ["o", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
-             ["o", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
-             ["o", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
-             ["o", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
-             ["o", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
-             ["o", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
-             ["o", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
-             ["o", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
-             ["o", "o", "o", "o", "o", "o", "o", "o", "o", "g"]]
+obstacles = [["w", "w", "w", "w", "w", "w", "w", "w", "w", "w"], 
+             ["w", "w", "w", "w", "w", "w", "w", "w", "w", "w"], 
+             ["w", "w", "w", "w", "w", "w", "w", "w", "w", "w"], 
+             ["w", "w", "w", "w", "w", "w", "w", "w", "w", "w"], 
+             ["w", "w", "w", "w", "w", "w", "w", "w", "w", "w"], 
+             ["w", "w", "w", "w", "w", "w", "w", "w", "w", "w"], 
+             ["w", "w", "w", "w", "w", "w", "w", "w", "w", "w"], 
+             ["w", "w", "w", "w", "w", "w", "w", "w", "w", "w"], 
+             ["w", "w", "w", "w", "w", "w", "w", "w", "w", "w"], 
+             ["w", "w", "w", "w", "w", "w", "w", "w", "w", "g"]]
 walls = []
 
 # while loop for the game
@@ -27,6 +27,44 @@ running = True
 
 # screen
 screen = py.display.set_mode((c.SCREEN_WIDTH, c.SCREEN_HEIGHT))
+
+# Function to generate a random maze using Depth-First Search algorithm
+def generate_maze(width, height):
+    global obstacles
+
+    # Start at a random point
+    start_x = 4
+    start_y = 5
+    
+    # probability of carving a path
+    probability = 0.6
+
+    # Mark the starting point as empty
+    obstacles[start_y][start_x] = "o"
+
+    # Recursive function to carve paths in the maze
+    def carve(x, y, p):
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+        random.shuffle(directions)
+        for dx, dy in directions:
+            nx, ny = x + dx, y + dy
+            if 0 <= nx < width and 0 <= ny < height and obstacles[ny][nx] == "w" and random.random() < p:
+                obstacles[y + dy // 2][x + dx // 2] = "o"
+                obstacles[ny][nx] = "o"
+                carve(nx, ny, p)
+
+    # Start carving paths from the starting point
+    carve(start_x, start_y, probability)
+
+    # mark the goal position
+    obstacles[-1][-1] = "g"
+    
+    obstacles[3][4] = "o"
+    obstacles[3][5] = "o"
+    obstacles[4][4] = "o"
+    obstacles[4][5] = "o"
+    obstacles[5][4] = "o"
+    obstacles[5][5] = "o"
 
 # initialize the obstacles and player
 def init():
@@ -36,23 +74,8 @@ def init():
     # player position
     player_pos = py.Vector2(c.SCREEN_WIDTH / 2, c.SCREEN_HEIGHT / 2)
     
-    # obstacles will be done later
-    for row in range(len(obstacles)):
-        for col in range(len(obstacles[row])):
-            if random.randint(0, 1) == 1 and obstacles[row][col] != "g":
-                obstacles[row][col] = "w"
-    
-    for row in obstacles:
-        for box in row:
-            if random.randint(0, 1) == 1 and box != "g":
-                box = "w"
-
-    obstacles[3][4] = "o"
-    obstacles[3][5] = "o"
-    obstacles[4][4] = "o"
-    obstacles[4][5] = "o"
-    obstacles[5][4] = "o"
-    obstacles[5][5] = "o"
+    # obstacle generation
+    generate_maze(c.OBSTACLE_LIST_WIDTH, c.OBSTACLE_LIST_HEIGHT)
             
 
 # main game loop

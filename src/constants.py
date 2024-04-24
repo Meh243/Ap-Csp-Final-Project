@@ -20,6 +20,10 @@ PLAYER_CIRCLE_RADIUS = 20
 # wall color
 WALL_COLOR = "purple"
 
+# obstacle list
+OBSTACLE_LIST_HEIGHT = 10
+OBSTACLE_LIST_WIDTH = 10
+
 # wall height and width
 WALL_WIDTH = SCREEN_WIDTH / 10
 WALL_HEIGHT = SCREEN_HEIGHT / 10
