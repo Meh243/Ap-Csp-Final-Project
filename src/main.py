@@ -27,13 +27,14 @@ def generate_maze(width, height):
     start_x = 0
     start_y = 0
     
+    # Distance from the end point
     dist_end_x = c.OBSTACLE_LIST_WIDTH - 1
     dist_end_y = c.OBSTACLE_LIST_HEIGHT - 1
 
     # Mark the starting point as empty
     obstacles[start_y][start_x] = "o"
     
-    
+    # generates a path from the starting point to the goal
     while dist_end_x != 0 or dist_end_y != 0:
         if (random.randint(0, 1) == 0 and dist_end_x != 0):
             obstacles[start_y][start_x + 1] = "o"
@@ -83,7 +84,6 @@ def main_loop():
         mainCircle = py.draw.circle(screen, c.PLAYER_COLOR, player_pos, c.PLAYER_CIRCLE_RADIUS)
         
         # these circles are used to allow the player to wrap around the screen
-        # idea by Nate Bailey
         topCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x, player_pos.y + c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
         bottomCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x, player_pos.y - c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
         leftCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x - c.SCREEN_WIDTH, player_pos.y), c.PLAYER_CIRCLE_RADIUS)
@@ -120,8 +120,13 @@ def main_loop():
                 # temporary winning condition for now
                 player_pos = py.Vector2(c.PLAYER_START_X, c.PLAYER_START_Y)
         
+        ''' Title: Pygame Front Page - Pygame v.2.6.0 Documentation
+        Author: Kim, Youngmok
+        Date: 2021
+        Code version: 2.6.0
+        Availability: https://www.pygame.org/docs/ref/pygame.html
+        '''
         # update player
-        # general movement learned from pygame documentation
         keys = py.key.get_pressed()
         if keys[py.K_w]:
             player_pos.y -= c.PLAYER_SPEED * dt
@@ -133,7 +138,6 @@ def main_loop():
             player_pos.x += c.PLAYER_SPEED * dt
             
         # wraps the player position around the screen
-        # idea by Nate Bailey
         player_pos.y = (player_pos.y + screen.get_height()) % screen.get_height()
         player_pos.x = (player_pos.x + screen.get_width()) % screen.get_width()
         
