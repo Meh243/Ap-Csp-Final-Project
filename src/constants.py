@@ -17,6 +17,12 @@ PLAYER_COLOR = "red"
 # player radius
 PLAYER_CIRCLE_RADIUS = 20
 
+# player starting position x
+PLAYER_START_X = SCREEN_WIDTH / 20
+
+# player starting position y
+PLAYER_START_Y = SCREEN_HEIGHT / 20
+
 # wall color
 WALL_COLOR = "purple"
 

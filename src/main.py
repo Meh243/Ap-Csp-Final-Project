@@ -32,12 +32,12 @@ screen = py.display.set_mode((c.SCREEN_WIDTH, c.SCREEN_HEIGHT))
 def generate_maze(width, height):
     global obstacles
 
-    # Start at a random point
-    start_x = 4
-    start_y = 5
+    # Start at a specified point
+    start_x = 0
+    start_y = 0
     
     # probability of carving a path
-    probability = 0.6
+    probability = 0.5
 
     # Mark the starting point as empty
     obstacles[start_y][start_x] = "o"
@@ -59,12 +59,7 @@ def generate_maze(width, height):
     # mark the goal position
     obstacles[-1][-1] = "g"
     
-    obstacles[3][4] = "o"
-    obstacles[3][5] = "o"
-    obstacles[4][4] = "o"
-    obstacles[4][5] = "o"
-    obstacles[5][4] = "o"
-    obstacles[5][5] = "o"
+    obstacles[0][0] = "o"
 
 # initialize the obstacles and player
 def init():
@@ -72,7 +67,7 @@ def init():
     global obstacles
     
     # player position
-    player_pos = py.Vector2(c.SCREEN_WIDTH / 2, c.SCREEN_HEIGHT / 2)
+    player_pos = py.Vector2(c.PLAYER_START_X, c.PLAYER_START_Y)
     
     # obstacle generation
     generate_maze(c.OBSTACLE_LIST_WIDTH, c.OBSTACLE_LIST_HEIGHT)
@@ -129,13 +124,13 @@ def main_loop():
             for circle in circles:
                 if wall.colliderect(circle):
                     # temporary losing condition for now
-                    player_pos = py.Vector2(c.SCREEN_WIDTH / 2, c.SCREEN_HEIGHT / 2)
+                    player_pos = py.Vector2(c.PLAYER_START_X, c.PLAYER_START_Y)
         
         # goal detection
         for circle in circles:
             if goal.colliderect(circle):
                 # temporary winning condition for now
-                player_pos = py.Vector2(c.SCREEN_WIDTH / 2, c.SCREEN_HEIGHT / 2)
+                player_pos = py.Vector2(c.PLAYER_START_X, c.PLAYER_START_Y)
         
         # update player
         # general movement learned from pygame documentation
