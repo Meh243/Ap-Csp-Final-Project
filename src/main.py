@@ -9,17 +9,8 @@ clock = py.time.Clock()
 player_pos = 0
 dt = 0
 
-# obstacles
-obstacles = [["w", "w", "w", "w", "w", "w", "w", "w", "w", "w"], 
-             ["w", "w", "w", "w", "w", "w", "w", "w", "w", "w"], 
-             ["w", "w", "w", "w", "w", "w", "w", "w", "w", "w"], 
-             ["w", "w", "w", "w", "w", "w", "w", "w", "w", "w"], 
-             ["w", "w", "w", "w", "w", "w", "w", "w", "w", "w"], 
-             ["w", "w", "w", "w", "w", "w", "w", "w", "w", "w"], 
-             ["w", "w", "w", "w", "w", "w", "w", "w", "w", "w"], 
-             ["w", "w", "w", "w", "w", "w", "w", "w", "w", "w"], 
-             ["w", "w", "w", "w", "w", "w", "w", "w", "w", "w"], 
-             ["w", "w", "w", "w", "w", "w", "w", "w", "w", "g"]]
+obstacles = [["w" for i in range(c.OBSTACLE_LIST_WIDTH)] for j in range(c.OBSTACLE_LIST_HEIGHT)]
+
 walls = []
 
 # while loop for the game
@@ -36,30 +27,27 @@ def generate_maze(width, height):
     start_x = 0
     start_y = 0
     
-    # probability of carving a path
-    probability = 0.5
+    dist_end_x = c.OBSTACLE_LIST_WIDTH - 1
+    dist_end_y = c.OBSTACLE_LIST_HEIGHT - 1
 
     # Mark the starting point as empty
     obstacles[start_y][start_x] = "o"
-
-    # Recursive function to carve paths in the maze
-    def carve(x, y, p):
-        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
-        random.shuffle(directions)
-        for dx, dy in directions:
-            nx, ny = x + dx, y + dy
-            if 0 <= nx < width and 0 <= ny < height and obstacles[ny][nx] == "w" and random.random() < p:
-                obstacles[y + dy // 2][x + dx // 2] = "o"
-                obstacles[ny][nx] = "o"
-                carve(nx, ny, p)
-
-    # Start carving paths from the starting point
-    carve(start_x, start_y, probability)
+    
+    
+    while dist_end_x != 0 or dist_end_y != 0:
+        if (random.randint(0, 1) == 0 and dist_end_x != 0):
+            obstacles[start_y][start_x + 1] = "o"
+            start_x += 1
+            dist_end_x -= 1
+        elif dist_end_y != 0:
+            obstacles[start_y + 1][start_x] = "o"
+            start_y += 1
+            dist_end_y -= 1
+            
+        print(dist_end_x, dist_end_y)
 
     # mark the goal position
     obstacles[-1][-1] = "g"
-    
-    obstacles[0][0] = "o"
 
 # initialize the obstacles and player
 def init():
