@@ -20,9 +20,9 @@ running = True
 screen = py.display.set_mode((c.SCREEN_WIDTH, c.SCREEN_HEIGHT))
 
 # Function to generate a random maze using Depth-First Search algorithm
-def generate_maze(width, height):
+def generate_maze():
     global obstacles
-
+    
     # Start at a specified point
     start_x = 0
     start_y = 0
@@ -44,8 +44,16 @@ def generate_maze(width, height):
             obstacles[start_y + 1][start_x] = "o"
             start_y += 1
             dist_end_y -= 1
-            
-        print(dist_end_x, dist_end_y)
+
+    # creates branching paths from the main path
+    for i in range(c.NUMBER_OF_BRANCHING_PATHS):
+        # random x value for the branching path
+        random_x = random.randint(0, c.OBSTACLE_LIST_WIDTH - 1)
+        
+        # creates the branching path in the y axis
+        for j in range(c.OBSTACLE_LIST_HEIGHT):
+            obstacles[j][random_x] = "o"
+    
 
     # mark the goal position
     obstacles[-1][-1] = "g"
@@ -53,13 +61,12 @@ def generate_maze(width, height):
 # initialize the obstacles and player
 def init():
     global player_pos
-    global obstacles
     
     # player position
     player_pos = py.Vector2(c.PLAYER_START_X, c.PLAYER_START_Y)
     
     # obstacle generation
-    generate_maze(c.OBSTACLE_LIST_WIDTH, c.OBSTACLE_LIST_HEIGHT)
+    generate_maze()
             
 
 # main game loop
@@ -81,19 +88,19 @@ def main_loop():
         screen.fill(c.BACKGROUND_COLOR)
         
         # creating our circles to represent the player
-        mainCircle = py.draw.circle(screen, c.PLAYER_COLOR, player_pos, c.PLAYER_CIRCLE_RADIUS)
+        main_circle = py.draw.circle(screen, c.PLAYER_COLOR, player_pos, c.PLAYER_CIRCLE_RADIUS)
         
         # these circles are used to allow the player to wrap around the screen
-        topCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x, player_pos.y + c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
-        bottomCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x, player_pos.y - c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
-        leftCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x - c.SCREEN_WIDTH, player_pos.y), c.PLAYER_CIRCLE_RADIUS)
-        rightCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x + c.SCREEN_WIDTH, player_pos.y), c.PLAYER_CIRCLE_RADIUS)
-        quadOneCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x + c.SCREEN_WIDTH, player_pos.y + c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
-        quadTwoCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x - c.SCREEN_WIDTH, player_pos.y + c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
-        quadThreeCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x - c.SCREEN_WIDTH, player_pos.y - c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
-        quadFourCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x + c.SCREEN_WIDTH, player_pos.y - c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
+        top_circle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x, player_pos.y + c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
+        bottom_circle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x, player_pos.y - c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
+        left_circle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x - c.SCREEN_WIDTH, player_pos.y), c.PLAYER_CIRCLE_RADIUS)
+        right_circle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x + c.SCREEN_WIDTH, player_pos.y), c.PLAYER_CIRCLE_RADIUS)
+        quad_one_circle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x + c.SCREEN_WIDTH, player_pos.y + c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
+        quad_two_circle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x - c.SCREEN_WIDTH, player_pos.y + c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
+        quad_three_circle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x - c.SCREEN_WIDTH, player_pos.y - c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
+        quad_four_circle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x + c.SCREEN_WIDTH, player_pos.y - c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
         
-        circles = [mainCircle, topCircle, bottomCircle, leftCircle, rightCircle, quadOneCircle, quadTwoCircle, quadThreeCircle, quadFourCircle]
+        circles = [main_circle, top_circle, bottom_circle, left_circle, right_circle, quad_one_circle, quad_two_circle, quad_three_circle, quad_four_circle]
         
         # creating the walls based on how the obstacles list is initialized
         for row in range(len(obstacles)):
