@@ -97,6 +97,7 @@ def main_loop():
         # if the counter reaches 0, the player loses
         if counter <= 0:
             py.display.set_caption("YOU LOSE!")
+            print("YOU LOSE!")
             running = False
         
         # clear screen

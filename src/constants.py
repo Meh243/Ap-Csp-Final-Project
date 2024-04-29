@@ -9,7 +9,7 @@ BACKGROUND_COLOR = "black"
 FPS = 60
 
 # player movement speed
-PLAYER_SPEED = 300
+PLAYER_SPEED = 1000
 
 # player color
 PLAYER_COLOR = "red"
@@ -29,6 +29,9 @@ WALL_COLOR = "purple"
 # obstacle list
 MAP_LIST_HEIGHT = 10
 MAP_LIST_WIDTH = 10
+
+# number of branching paths off the main path
+NUMBER_OF_BRANCHING_PATHS = 3
 
 # wall height and width
 WALL_WIDTH = SCREEN_WIDTH / MAP_LIST_WIDTH
