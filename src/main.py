@@ -1,3 +1,4 @@
+import random
 import pygame as py
 import constants as c
 
@@ -8,34 +9,65 @@ clock = py.time.Clock()
 player_pos = 0
 dt = 0
 
-# obstacles
-obstacles = [["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
-             ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
-             ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
-             ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
-             ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
-             ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
-             ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
-             ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
-             ["w", "o", "o", "o", "o", "o", "o", "o", "o", "o"], 
-             ["w", "o", "o", "o", "o", "o", "o", "o", "o", "g"]]
-walls = []
+obstacles = [["w" for i in range(c.OBSTACLE_LIST_WIDTH)] for j in range(c.OBSTACLE_LIST_HEIGHT)]
 
-# screen
-screen = py.display.set_mode((c.SCREEN_WIDTH, c.SCREEN_HEIGHT))
+walls = []
 
 # while loop for the game
 running = True
 
+# screen
+screen = py.display.set_mode((c.SCREEN_WIDTH, c.SCREEN_HEIGHT))
+
+# Function to generate a random maze using Depth-First Search algorithm
+def generate_maze():
+    global obstacles
+    
+    # Start at a specified point
+    start_x = 0
+    start_y = 0
+    
+    # Distance from the end point
+    dist_end_x = c.OBSTACLE_LIST_WIDTH - 1
+    dist_end_y = c.OBSTACLE_LIST_HEIGHT - 1
+
+    # Mark the starting point as empty
+    obstacles[start_y][start_x] = "o"
+    
+    # generates a path from the starting point to the goal
+    while dist_end_x != 0 or dist_end_y != 0:
+        if (random.randint(0, 1) == 0 and dist_end_x != 0):
+            obstacles[start_y][start_x + 1] = "o"
+            start_x += 1
+            dist_end_x -= 1
+        elif dist_end_y != 0:
+            obstacles[start_y + 1][start_x] = "o"
+            start_y += 1
+            dist_end_y -= 1
+
+    # creates branching paths from the main path
+    for i in range(c.NUMBER_OF_BRANCHING_PATHS):
+        # random x value for the branching path
+        random_x = random.randint(0, c.OBSTACLE_LIST_WIDTH - 1)
+        
+        # creates the branching path in the y axis
+        for j in range(c.OBSTACLE_LIST_HEIGHT):
+            obstacles[j][random_x] = "o"
+    
+
+    # mark the goal position
+    obstacles[-1][-1] = "g"
+
 # initialize the obstacles and player
 def init():
     global player_pos
-    global obstacles
     
     # player position
-    player_pos = py.Vector2(c.SCREEN_WIDTH / 2, c.SCREEN_HEIGHT / 2)
+    player_pos = py.Vector2(c.PLAYER_START_X, c.PLAYER_START_Y)
     
-    # obstacles will be done later
+    # obstacle generation
+    generate_maze()
+            
 
 # main game loop
 def main_loop():
@@ -50,26 +82,25 @@ def main_loop():
         for event in py.event.get():
             if event.type == py.QUIT:
                 py.quit()
-                exit()
+                quit()
         
         # clear screen
         screen.fill(c.BACKGROUND_COLOR)
         
         # creating our circles to represent the player
-        mainCircle = py.draw.circle(screen, c.PLAYER_COLOR, player_pos, c.PLAYER_CIRCLE_RADIUS)
+        main_circle = py.draw.circle(screen, c.PLAYER_COLOR, player_pos, c.PLAYER_CIRCLE_RADIUS)
         
         # these circles are used to allow the player to wrap around the screen
-        # idea by Nate Bailey
-        topCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x, player_pos.y + c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
-        bottomCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x, player_pos.y - c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
-        leftCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x - c.SCREEN_WIDTH, player_pos.y), c.PLAYER_CIRCLE_RADIUS)
-        rightCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x + c.SCREEN_WIDTH, player_pos.y), c.PLAYER_CIRCLE_RADIUS)
-        quadOneCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x + c.SCREEN_WIDTH, player_pos.y + c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
-        quadTwoCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x - c.SCREEN_WIDTH, player_pos.y + c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
-        quadThreeCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x - c.SCREEN_WIDTH, player_pos.y - c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
-        quadFourCircle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x + c.SCREEN_WIDTH, player_pos.y - c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
+        top_circle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x, player_pos.y + c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
+        bottom_circle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x, player_pos.y - c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
+        left_circle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x - c.SCREEN_WIDTH, player_pos.y), c.PLAYER_CIRCLE_RADIUS)
+        right_circle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x + c.SCREEN_WIDTH, player_pos.y), c.PLAYER_CIRCLE_RADIUS)
+        quad_one_circle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x + c.SCREEN_WIDTH, player_pos.y + c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
+        quad_two_circle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x - c.SCREEN_WIDTH, player_pos.y + c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
+        quad_three_circle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x - c.SCREEN_WIDTH, player_pos.y - c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
+        quad_four_circle = py.draw.circle(screen, c.PLAYER_COLOR, (player_pos.x + c.SCREEN_WIDTH, player_pos.y - c.SCREEN_HEIGHT), c.PLAYER_CIRCLE_RADIUS)
         
-        circles = [mainCircle, topCircle, bottomCircle, leftCircle, rightCircle, quadOneCircle, quadTwoCircle, quadThreeCircle, quadFourCircle]
+        circles = [main_circle, top_circle, bottom_circle, left_circle, right_circle, quad_one_circle, quad_two_circle, quad_three_circle, quad_four_circle]
         
         # creating the walls based on how the obstacles list is initialized
         for row in range(len(obstacles)):
@@ -88,16 +119,21 @@ def main_loop():
             for circle in circles:
                 if wall.colliderect(circle):
                     # temporary losing condition for now
-                    player_pos = py.Vector2(c.SCREEN_WIDTH / 2, c.SCREEN_HEIGHT / 2)
+                    player_pos = py.Vector2(c.PLAYER_START_X, c.PLAYER_START_Y)
         
         # goal detection
         for circle in circles:
             if goal.colliderect(circle):
                 # temporary winning condition for now
-                player_pos = py.Vector2(c.SCREEN_WIDTH / 2, c.SCREEN_HEIGHT / 2)
+                player_pos = py.Vector2(c.PLAYER_START_X, c.PLAYER_START_Y)
         
+        ''' Title: Pygame Front Page - Pygame v.2.6.0 Documentation
+        Author: Kim, Youngmok
+        Date: 2021
+        Code version: 2.6.0
+        Availability: https://www.pygame.org/docs/ref/pygame.html
+        '''
         # update player
-        # general movement learned from pygame documentation
         keys = py.key.get_pressed()
         if keys[py.K_w]:
             player_pos.y -= c.PLAYER_SPEED * dt
@@ -109,7 +145,6 @@ def main_loop():
             player_pos.x += c.PLAYER_SPEED * dt
             
         # wraps the player position around the screen
-        # idea by Nate Bailey
         player_pos.y = (player_pos.y + screen.get_height()) % screen.get_height()
         player_pos.x = (player_pos.x + screen.get_width()) % screen.get_width()
         
