@@ -9,7 +9,7 @@ BACKGROUND_COLOR = "black"
 FPS = 60
 
 # player movement speed
-PLAYER_SPEED = 300
+PLAYER_SPEED = 1000
 
 # player color
 PLAYER_COLOR = "red"
@@ -27,15 +27,15 @@ PLAYER_START_Y = SCREEN_HEIGHT / 20
 WALL_COLOR = "purple"
 
 # obstacle list
-OBSTACLE_LIST_HEIGHT = 10
-OBSTACLE_LIST_WIDTH = 10
+MAP_LIST_HEIGHT = 10
+MAP_LIST_WIDTH = 10
 
-# amount of branching pathways in the maze
+# number of branching paths off the main path
 NUMBER_OF_BRANCHING_PATHS = 3
 
 # wall height and width
-WALL_WIDTH = SCREEN_WIDTH / OBSTACLE_LIST_WIDTH
-WALL_HEIGHT = SCREEN_HEIGHT / OBSTACLE_LIST_HEIGHT
+WALL_WIDTH = SCREEN_WIDTH / MAP_LIST_WIDTH
+WALL_HEIGHT = SCREEN_HEIGHT / MAP_LIST_HEIGHT
 
 # goal color
 GOAL_COLOR = "green"
