@@ -12,7 +12,8 @@ counter = 10
 player_pos = 0
 dt = 0
 
-obstacles = [["w" for i in range(c.OBSTACLE_LIST_WIDTH)] for j in range(c.OBSTACLE_LIST_HEIGHT)]
+# the list that represents our map with walls("w"), open spaces("o"), and the goal("g")
+map = [["w" for i in range(c.MAP_LIST_WIDTH)] for j in range(c.MAP_LIST_HEIGHT)]
 
 walls = []
 
@@ -24,51 +25,51 @@ screen = py.display.set_mode((c.SCREEN_WIDTH, c.SCREEN_HEIGHT))
 
 # Function to generate a random maze using Depth-First Search algorithm
 def generate_maze():
-    global obstacles
+    global map
     
     # Start at a specified point
     start_x = 0
     start_y = 0
     
     # Distance from the end point
-    dist_end_x = c.OBSTACLE_LIST_WIDTH - 1
-    dist_end_y = c.OBSTACLE_LIST_HEIGHT - 1
+    dist_end_x = c.MAP_LIST_WIDTH - 1
+    dist_end_y = c.MAP_LIST_HEIGHT - 1
 
     # Mark the starting point as empty
-    obstacles[start_y][start_x] = "o"
+    map[start_y][start_x] = "o"
     
     # generates a path from the starting point to the goal
     while dist_end_x != 0 or dist_end_y != 0:
         if (random.randint(0, 1) == 0 and dist_end_x != 0):
-            obstacles[start_y][start_x + 1] = "o"
+            map[start_y][start_x + 1] = "o"
             start_x += 1
             dist_end_x -= 1
         elif dist_end_y != 0:
-            obstacles[start_y + 1][start_x] = "o"
+            map[start_y + 1][start_x] = "o"
             start_y += 1
             dist_end_y -= 1
 
     # creates branching paths from the main path
     for i in range(c.NUMBER_OF_BRANCHING_PATHS):
         # random x value for the branching path
-        random_x = random.randint(0, c.OBSTACLE_LIST_WIDTH - 1)
+        random_x = random.randint(0, c.MAP_LIST_WIDTH - 1)
         
         # creates the branching path in the y axis
-        for j in range(c.OBSTACLE_LIST_HEIGHT):
-            obstacles[j][random_x] = "o"
+        for j in range(c.MAP_LIST_HEIGHT):
+            map[j][random_x] = "o"
     
 
     # mark the goal position
-    obstacles[-1][-1] = "g"
+    map[-1][-1] = "g"
 
-# initialize the obstacles and player
+# initialize the map and player
 def init():
     global player_pos
     
     # player position
     player_pos = py.Vector2(c.PLAYER_START_X, c.PLAYER_START_Y)
     
-    # obstacle generation
+    # map generation
     generate_maze()
             
 
@@ -78,7 +79,7 @@ def main_loop():
     global counter
     global player_pos
     global dt
-    global obstacles
+    global map
     global walls
     global running
     
@@ -116,14 +117,14 @@ def main_loop():
         
         circles = [main_circle, top_circle, bottom_circle, left_circle, right_circle, quad_one_circle, quad_two_circle, quad_three_circle, quad_four_circle]
         
-        # creating the walls based on how the obstacles list is initialized
-        for row in range(len(obstacles)):
-            for col in range(len(obstacles[row])):
-                if obstacles[row][col] == "w":
+        # creating the walls based on how the map list is initialized
+        for row in range(len(map)):
+            for col in range(len(map[row])):
+                if map[row][col] == "w":
                     # wall creation
                     wall = py.draw.rect(screen, c.WALL_COLOR, ((c.WALL_WIDTH * col, c.WALL_HEIGHT * row), (c.WALL_WIDTH, c.WALL_HEIGHT)))
                     walls.append(wall)
-                if obstacles[row][col] == "g":
+                if map[row][col] == "g":
                     # goal creation
                     goal = py.draw.rect(screen, c.GOAL_COLOR, ((c.WALL_WIDTH * col, c.WALL_HEIGHT * row), (c.WALL_WIDTH, c.WALL_HEIGHT)))
                 # if no wall or goal, then it's an open space with no need to draw anything
