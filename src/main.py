@@ -5,6 +5,9 @@ import constants as c
 # clock/fps
 clock = py.time.Clock()
 
+# counter
+counter = 10
+
 # player
 player_pos = 0
 dt = 0
@@ -71,6 +74,8 @@ def init():
 
 # main game loop
 def main_loop():
+    global clock
+    global counter
     global player_pos
     global dt
     global obstacles
@@ -83,6 +88,15 @@ def main_loop():
             if event.type == py.QUIT:
                 py.quit()
                 quit()
+        
+        # timer
+        counter -= dt
+        py.display.set_caption(str(int(counter)))
+        
+        # if the counter reaches 0, the player loses
+        if counter <= 0:
+            py.display.set_caption("YOU LOSE!")
+            running = False
         
         # clear screen
         screen.fill(c.BACKGROUND_COLOR)
@@ -118,14 +132,16 @@ def main_loop():
         for wall in walls:
             for circle in circles:
                 if wall.colliderect(circle):
-                    # temporary losing condition for now
+                    # when hitting a wall, the player is reset to the starting position
                     player_pos = py.Vector2(c.PLAYER_START_X, c.PLAYER_START_Y)
         
         # goal detection
         for circle in circles:
             if goal.colliderect(circle):
-                # temporary winning condition for now
-                player_pos = py.Vector2(c.PLAYER_START_X, c.PLAYER_START_Y)
+                # when hitting the goal, the player wins the game
+                py.display.set_caption("YOU WIN!")
+                print("YOU WIN!")
+                running = False
         
         ''' Title: Pygame Front Page - Pygame v.2.6.0 Documentation
         Author: Kim, Youngmok
@@ -147,7 +163,6 @@ def main_loop():
         # wraps the player position around the screen
         player_pos.y = (player_pos.y + screen.get_height()) % screen.get_height()
         player_pos.x = (player_pos.x + screen.get_width()) % screen.get_width()
-        
         
         # update display
         py.display.flip()
